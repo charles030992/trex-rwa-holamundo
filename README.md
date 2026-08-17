@@ -1,5 +1,7 @@
 # trex-rwa-holamundo
 
+Repo: https://github.com/charles030992/trex-rwa-holamundo
+
 Proyecto de aprendizaje técnico (no comercial) para entender el estándar **ERC-3643 / suite T-REX** desplegándolo en una testnet local y provocando deliberadamente un fallo de compliance para luego resolverlo.
 
 > La teoría y las decisiones de arquitectura se discuten en una conversación aparte en claude.ai. Este README es el punto de retoma técnico dentro de Claude Code: si se interrumpe el trabajo, empezar por aquí.
@@ -32,7 +34,8 @@ Desplegar la suite T-REX completa en Hardhat local y provocar un `transfer` que 
 
 - `reference/ERC-3643-source/` — clon del repo oficial, **solo consulta**, excluido de git. No es código propio.
 - `node_modules/@erc3643org/erc-3643/` y `node_modules/@onchain-id/solidity/` — la suite real que se despliega, instalada como dependencia npm.
-- `contracts/`, `scripts/`, `test/` — código propio de este ejercicio (scripts de deploy, pruebas del escenario Alice/Bob).
+- `scripts/` — código propio de este ejercicio: deploy de la suite (`01`) y el escenario Alice/Bob completo (`02` a `05`).
+- `contracts/`, `test/` — creadas en el paso 1 pero sin uso todavía; no hizo falta escribir contratos propios (todo se despliega desde artifacts de los paquetes npm) ni tests formales (los scripts `02`-`05` cumplen ese rol de forma ejecutable).
 
 ---
 
@@ -114,19 +117,17 @@ No hace falta rehacer los pasos 1-3 (instalación) salvo que se borre `node_modu
 
 ---
 
-## Cierre de sesión — 2026-08-12
+## Cierre de sesión — 2026-08-17
 
-- Nodo local (`npx hardhat node`) **detenido** deliberadamente al cerrar la sesión (ver nota de arriba: no tiene sentido dejarlo corriendo entre sesiones porque su estado no se usa de todas formas hasta que se redespliegue).
-- Todo el código de los pasos 1-3, 4.1 y 4.2 está guardado en disco (`hardhat.config.ts`, `tsconfig.json`, `scripts/01-deploy-suite.ts`, este README) — nada de esto se pierde al parar el nodo.
-- `deployments/localhost.json` de esta sesión queda en disco solo como referencia histórica de que el script funcionó; **no usar sus direcciones directamente en la próxima sesión**, hay que regenerarlo.
-- Pendiente para la próxima sesión: retomar en el paso 4.3, después de repetir los dos comandos de arriba.
-- El usuario se ha llevado un prompt de resumen a claude.ai para repasar la teoría de los pasos 1-3/4.1/4.2 "como si fuera a mano" antes de continuar con la implementación.
+- **Objetivo de la primera entrega completado**: pasos 4.3 a 4.6 implementados, ejecutados y verificados (ver sección "Progreso" arriba). El contraste falla→verifico→funciona quedó demostrado de punta a punta contra el nodo local.
+- Repo publicado en GitHub (público): https://github.com/charles030992/trex-rwa-holamundo. Primer commit incluye `.gitignore`, `README.md`, `hardhat.config.ts`, `package.json`, `package-lock.json`, `tsconfig.json` y los 5 scripts de `scripts/`. Verificado que el contenido remoto coincide exactamente con el local — nada sensible subido (`deployments/`, `node_modules/`, `reference/` quedan fuera por `.gitignore`).
+- Nodo local (`npx hardhat node`) seguía corriendo al cerrar esta sesión de trabajo; recuerda que su estado es en memoria (ver nota de arriba) — si lo paras, hay que redesplegar todo desde el paso 4.2 para retomar cualquier prueba manual.
+- No hay pasos `⏳` pendientes del objetivo original. Próximos pasos (sin decidir todavía): podrían ser tests formales en `test/` con Hardhat/Chai en vez de scripts ejecutables, o un segundo escenario de compliance (p.ej. límite de balance o restricción de país) como siguiente entrega.
 
 ---
 
 ## Cómo retomar el trabajo
 
-1. Leer este README para ver en qué paso se quedó (sección "Progreso" arriba).
-2. Levantar el nodo y redesplegar la suite (ver sección "El nodo local NO conserva estado" arriba) — **paso obligatorio siempre que se reinicie el nodo**.
-3. Continuar por el primer paso marcado `⏳`.
-4. Actualizar este README al cerrar cada paso (checkbox + fecha + código relevante), y la carpeta de memoria de Claude Code si cambia alguna decisión de arquitectura.
+1. Leer este README para ver en qué punto quedó el proyecto (sección "Progreso" arriba) — a día de hoy, la primera entrega está completa.
+2. Si quieres repetir o inspeccionar el escenario Alice/Bob: levantar el nodo y redesplegar la suite (ver sección "El nodo local NO conserva estado" arriba) — **paso obligatorio siempre que se reinicie el nodo** — y ejecutar los scripts `02` a `05` en orden.
+3. Si se abre una nueva entrega (tests formales, segundo escenario de compliance, etc.), documentarla aquí como una nueva sección de "Progreso" con su propia fecha, y actualizar la carpeta de memoria de Claude Code si cambia alguna decisión de arquitectura.
